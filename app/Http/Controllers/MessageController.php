@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class MessageController extends Controller
 {
+
+    public function index(){
+        return view('messages.index');
+    }
+
+
     public function send_message(Request $request)
     {
         try {
             // Validate input
             $request->validate([
                 'to' => 'required',
-                'message' => 'required'
+                'message' => 'required|string'
             ]);
 
             // Retrieve credentials
@@ -45,10 +52,14 @@ class MessageController extends Controller
                 throw new Exception($responseData['error']['message']);
             }
 
+            Message::create([
+                'to' => $request->to,
+                'message' => $request->message,
+            ]);
+
             return response()->json([
-                'status' => 200,
-                'message' => 'Message sent successfully',
-                'response' => $responseData
+                'success' => true,
+                'message' => 'Message sent successfully!',
             ]);
 
         } catch (Exception $e) {
