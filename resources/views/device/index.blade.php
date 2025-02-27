@@ -12,7 +12,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('WhatsApp Sender') }}
+            {{ __('Add Device') }}
         </h2>
     </x-slot>
 
@@ -22,12 +22,17 @@
                 @csrf
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <x-input-label for="message" value="Message*" />
+                    <x-input-label for="message" value="Number*" />
                     <x-text-input id="message" name="message" class="mt-1 block w-full" />
                 </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <x-input-label for="to" value="To*" />
+                    <x-input-label for="to" value="Name*" />
+                    <x-text-input id="to" name="to" class="mt-1 block w-full" />
+                </div>
+
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <x-input-label for="to" value="Description*" />
                     <x-text-input id="to" name="to" class="mt-1 block w-full" />
                 </div>
 

@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,6 +21,13 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/messages', [MessageController::class, 'index'])->name('messages');
 Route::post('/send-message', [MessageController::class, 'send_message']);
+
+Route::get('create-device',[DeviceController::class, 'create_device'])->name('devices');
+Route::post('store-device',[DeviceController::class, 'store_device']);
+
+Route::get('qr-code/{deviceId}', [DeviceController::class, 'qrCode'])->name('qrCode');
+Route::get('link-device/{deviceId}', [DeviceController::class, 'link_device']);
+Route::get('generate-qr-code', [DeviceController::class, 'generate_qr_code']);
 
 
 require __DIR__.'/auth.php';

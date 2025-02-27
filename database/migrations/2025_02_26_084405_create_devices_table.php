@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
+            $table->string('device_name');
+            $table->string('device_id')->unique();
             $table->timestamps();
         });
     }
