@@ -21,6 +21,21 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 @csrf
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <x-input-label for="device" value="Select Device*" />
+
+                    <select id="device" name="device" class="mt-1 block w-full border-gray-300 dark:border-gray-700
+                        dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-indigo-500 focus:ring
+                        focus:ring-indigo-500 focus:ring-opacity-50">
+                        <option value="" disabled selected>-- Select a Device --</option>
+                        @foreach($devices as $device)
+                            <option value="{{ $device->id }}">{{ $device->device_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <x-input-label for="message" value="Message*" />
                     <x-text-input id="message" name="message" class="mt-1 block w-full" />

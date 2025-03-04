@@ -12,32 +12,33 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Add Device') }}
+            {{ __('Edit Device') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <form id="deviceForm" action="{{ route('store.device') }}" method="POST">
+        <form id="deviceForm" action="{{ route('update.device', $device->id) }}" method="POST">
+            @method('PUT')
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 @csrf
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <x-input-label for="number" value="Number*" />
-                    <x-text-input id="phone_number" name="phone_number" class="mt-1 block w-full" />
+                    <x-text-input id="phone_number" name="phone_number" class="mt-1 block w-full" value="{{ $device->phone_number }}" />
                 </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <x-input-label for="device_name" value="Name*" />
-                    <x-text-input id="device_name" name="device_name" class="mt-1 block w-full" />
+                    <x-text-input id="device_name" name="device_name" class="mt-1 block w-full" value="{{ $device->device_name }}" />
                 </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <x-input-label for="description " value="Description" />
-                    <x-text-input id="description" name="description" class="mt-1 block w-full" />
+                    <x-text-input id="description" name="description" class="mt-1 block w-full" value="{{ $device->description }}" />
                 </div>
 
                 <div class="p-6 text-gray-900 dark:text-gray-100 flex justify-start">
-                        <x-primary-button class="mt-4">Add Device</x-primary-button>
+                        <x-primary-button class="mt-4">Update Device</x-primary-button>
                 </div>
             </div>
         </div>
@@ -79,7 +80,6 @@
                     }
                 });
 
-
             setTimeout(() => {
                 window.location.href = data.redirect_url; // Redirect to device list page
             }, 2000);
@@ -91,7 +91,7 @@
                     toast: true,
                     position: "top-end",
                     icon: "error",
-                    title: "Failed to add device!",
+                    title: "Failed to update device!",
                     showConfirmButton: false,
                     timer: 2000,
                     width: "auto",
@@ -109,7 +109,7 @@
                 toast: true,
                     position: "top-end",
                     icon: "error",
-                    title: "Failed to add device!",
+                    title: "Failed to update device!",
                     showConfirmButton: false,
                     timer: 2000,
                     width: "auto",

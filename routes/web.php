@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DeviceController;
+use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 
@@ -19,15 +20,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// MESSAGES
+
 Route::get('/messages', [MessageController::class, 'index'])->name('messages');
 Route::post('/send-message', [MessageController::class, 'send_message']);
 
-Route::get('create-device',[DeviceController::class, 'create_device'])->name('devices');
-Route::post('store-device',[DeviceController::class, 'store_device']);
+// DEVICES
 
-Route::get('qr-code/{deviceId}', [DeviceController::class, 'qrCode'])->name('qrCode');
-Route::get('link-device/{deviceId}', [DeviceController::class, 'link_device']);
-Route::get('generate-qr-code', [DeviceController::class, 'generate_qr_code']);
+Route::get('create-device',[DeviceController::class, 'index'])->name('devices');
+Route::post('store-device',[DeviceController::class, 'store'])->name('store.device');
+Route::get('list-device',[DeviceController::class, 'list'])->name('device.list');
+Route::get('edit-device/{device}',[DeviceController::class, 'edit'])->name('edit.device');
+Route::put('update-device/{device}',[DeviceController::class, 'update'])->name('update.device');
+Route::delete('delete-device/{device}',[DeviceController::class, 'delete'])->name('delete.device');
+Route::get('/check-status/{id}', [DeviceController::class, 'checkStatus'])->name('check.status');
+
+
+// QR CODE
+Route::get('qr-code/{device}', [QrCodeController::class, 'scan'])->name('qr.code');
 
 
 require __DIR__.'/auth.php';

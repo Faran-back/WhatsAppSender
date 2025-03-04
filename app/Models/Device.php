@@ -8,6 +8,12 @@ class Device extends Model
 {
     protected $fillable = [
         'device_name',
-        'device_id'
+        'phone_number',
+        'description',
+        'status'
     ];
+
+    public function qr_code(){
+        return $this->hasOne(QrCode::class);
+    }
 }

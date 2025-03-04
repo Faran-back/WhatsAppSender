@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Models\Message;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,7 +12,8 @@ class MessageController extends Controller
 {
 
     public function index(){
-        return view('messages.index');
+        $devices = Device::all();
+        return view('messages.index',compact('devices'));
     }
 
 
@@ -20,28 +22,14 @@ class MessageController extends Controller
         try {
             // Validate input
             $request->validate([
+                'device' => 'required',
                 'to' => 'required',
                 'message' => 'required|string'
             ]);
 
-            // Retrieve credentials
-            $accessToken = env('WHATSAPP_ACCESS_TOKEN');
-            $phoneNumberId = env('PHONE_NUMBER_ID');
+            $device = Device::findOrFail($request->device);
 
-            // Check if credentials are set
-            if (!$accessToken || !$phoneNumberId) {
-                throw new Exception("Missing WhatsApp API credentials.");
-            }
-
-            // API URL
-            $url = "https://graph.facebook.com/v22.0/{$phoneNumberId}/messages";
-
-            // Send request
-            $response = Http::withToken($accessToken)->post($url, [
-                "messaging_product" => "whatsapp",
-                "to" => $request->to,
-                "type" => "text",
-                "text" => ["body" => $request->message]
+            $response = Http::post(env('URL_WA_SERVER') . $device->name . '/messages/send', [
             ]);
 
             // Decode response
@@ -53,6 +41,7 @@ class MessageController extends Controller
             }
 
             Message::create([
+                'device_id' => $request->device_id,
                 'to' => $request->to,
                 'message' => $request->message,
             ]);
