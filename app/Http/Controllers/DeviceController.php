@@ -55,18 +55,22 @@ class DeviceController extends Controller
                     'message' => 'Error generating token: ' . $response->body()
                 ]);
             } else {
+                $full = $response->json('full');
+
                 $token = $response->json('token');
 
                 $device->update([
+                    'full' => $full,
                     'token' => $token
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Device created successfully!',
+                    'redirect_url' => route('device.list')
                 ]);
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Device created successfully!',
-                'redirect_url' => route('device.list')
-            ]);
 
         } catch (Exception $e){
             return response()->json([
@@ -103,34 +107,8 @@ class DeviceController extends Controller
 
     }
 
-    // public function delete($id){
-    //     try{
-    //         $device = Device::where('id' , $id);
+    public function delete($id){
 
-    //         if(!$device){
-    //             return response()->json([
-    //                 'status' => 404,
-    //                 'message' => 'Device Not Found',
-    //             ]);
-    //         }
-
-    //         $device->delete();
-
-    //         return response()->json([
-    //             'status' => true,
-    //             'message' => 'Device deleted successfully!'
-    //         ]);
-
-    //     }catch(Exception $e){
-    //         return response()->json([
-    //             'status' => 500,
-    //             'message' => $e->getMessage(),
-    //         ]);
-    //     }
-    // }
-
-    public function delete($id)
-{
     $device = Device::findOrFail($id);
     $device->delete();
 
@@ -140,21 +118,32 @@ class DeviceController extends Controller
     return redirect()->route('device.list');
 }
 
-public function checkStatus($id)
-    {
-        $device = Device::findOrFail($id);
+public function checkStatus($id){
 
-        // Call API to check status
-        $response = Http::get(env('URL_WA_SERVER') . '/sessions/' . $device->device_name . '/status');
-        $data = $response->json();
+    $device = Device::findOrFail($id);
 
-        // If authenticated, update database
-        if ($data['status'] === "AUTHENTICATED") {
+    $session = $device->device_name;
+    $token = $device->token;
+
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer ' . $token
+    ])->get("http://localhost:21465/api/{$session}/check-connection-session");
+
+    if ($response->successful()) {
+
+        $status = $response->json('message') ?? 'Disconnected';
+
+        if($status === 'Connected'){
             $device->update([
-                'status' => 'AUTHENTICATED'
+                'status' => 'Connected'
             ]);
         }
 
-        return response()->json(['status' => $data['status']]);
+        return response()->json(['status' => $status]);
+
     }
+
+        return response()->json(['status' => 'Disconnected']);
+
+}
 }

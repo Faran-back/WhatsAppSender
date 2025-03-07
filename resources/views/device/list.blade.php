@@ -43,7 +43,7 @@
                             <td class="border border-gray-300 p-2">{{ $device->device_name }}</td>
                             <td class="border border-gray-300 p-2">{{ $device->phone_number }}</td>
                             <td class="border border-gray-300 p-2">{{ $device->description }}</td>
-                            @if($device->status === 'AUTHENTICATED')
+                            @if($device->status === 'Connected')
                             <td class="border border-gray-300 text-green-600 p-2">{{ $device->status }}</td>
                             @else
                             <td class="border border-gray-300 text-red-500 p-2">{{ $device->status }}</td>

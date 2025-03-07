@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Device;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -21,29 +19,16 @@ class QrCodeController extends Controller
             'token' => $device->token
         ]);
 
-        if (!$response->successful()) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Error starting session: ' . $response->body()
-            ]);
+        if ($response->successful()) {
+            if(isset($response['qrcode'])){
+                $qrCodeImage = $response['qrcode'];
+                return view('qr.index', compact(['qrCodeImage','device']));
+            }
         }
 
-        Log::info('API Response:', $response->json());
 
 
-        $sessionId = $response->json('session');
-
-        if (!$sessionId) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Error: Session ID not received from API.'
-            ]);
-        }
-
-        $qrCodeImage = QrCode::size(250)->generate($sessionId);
-
-
-        return view('qr.index', compact(['qrCodeImage','device']));
+        return view('qr.index', compact('device'));
     }
 
 }

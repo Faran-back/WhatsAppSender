@@ -11,7 +11,8 @@ class Device extends Model
         'phone_number',
         'description',
         'status',
-        'token'
+        'token',
+        'full',
     ];
 
     public function qr_code(){

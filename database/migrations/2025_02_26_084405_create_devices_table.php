@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('device_name');
             $table->string('phone_number')->unique();
             $table->string('description')->nullable();
-            $table->string('status')->default('Unauthenticated');
+            $table->string('status')->default('Disconnected');
             $table->string('token')->nullable();
+            $table->string('full')->nullable();
             $table->timestamps();
         });
     }

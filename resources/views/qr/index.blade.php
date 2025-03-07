@@ -8,13 +8,11 @@
     <div class="flex items-center justify-center mt-16 space-x-8">
         <!-- QR Code -->
         <div>
-            @if($qrCodeImage)
-                <div id="qrImage" class="w-64 h-64 border border-gray-300 rounded-lg shadow-md">
-                    {!! $qrCodeImage !!}
-                </div>
-            @else
-                <p class="text-red-500">Failed to generate QR Code.</p>
-            @endif
+            @if(isset($qrCodeImage))
+            <img src="{{ $qrCodeImage }}" alt="QR Code">
+        @else
+            <p>No QR code available.</p>
+        @endif
         </div>
 
 
@@ -30,20 +28,23 @@
         </div>
     </div>
 
+
+
     <!-- Include Filament Toaster -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         function checkStatus() {
-            fetch("{{ route('check.status', $device->id) }}")
+            fetch("{{ url('check-status/'. $device->id ) }}")
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === "AUTHENTICATED") {
+                console.log("Device Status Response:", data);
+                    if (data.status === 'Connected') {
                         Swal.fire({
                             toast: true,
                             position: "top-end",
                             icon: "success",
-                            title: "Authenticated!",
+                            title: "Connected!",
                             showConfirmButton: false,
                             timer: 2000
                         });

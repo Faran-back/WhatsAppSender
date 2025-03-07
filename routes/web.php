@@ -5,6 +5,7 @@ use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,7 +34,7 @@ Route::get('list-device',[DeviceController::class, 'list'])->name('device.list')
 Route::get('edit-device/{device}',[DeviceController::class, 'edit'])->name('edit.device');
 Route::put('update-device/{device}',[DeviceController::class, 'update'])->name('update.device');
 Route::delete('delete-device/{device}',[DeviceController::class, 'delete'])->name('delete.device');
-Route::get('/check-status/{id}', [DeviceController::class, 'checkStatus'])->name('check.status');
+Route::get('check-status/{id}', [DeviceController::class, 'checkStatus']);
 
 
 // QR CODE
