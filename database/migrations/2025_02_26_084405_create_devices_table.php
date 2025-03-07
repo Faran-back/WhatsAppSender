@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->string('description')->nullable();
             $table->string('status')->default('Unauthenticated');
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }

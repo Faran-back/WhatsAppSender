@@ -7,6 +7,7 @@ use App\Models\Device;
 use Illuminate\Http\Request;
 use function Pest\Laravel\json;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
@@ -41,15 +42,31 @@ class DeviceController extends Controller
                 'description' => $request->description,
             ]);
 
+            $session = $request->device_name;
+            $secretKey = 'THISISMYSECURETOKEN';
+
+            $url = $url = 'http://localhost:21465/api/' . $session . '/' . $secretKey . '/generate-token';
+            $response = Http::post($url);
+
+            if (!$response->successful()) {
+                Log::error('API Request Failed: ' . $response->body());
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Error generating token: ' . $response->body()
+                ]);
+            } else {
+                $token = $response->json('token');
+
+                $device->update([
+                    'token' => $token
+                ]);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Device created successfully!',
                 'redirect_url' => route('device.list')
             ]);
-
-
-            // return redirect()->route('device.list')->with(['success', 'Device created successfully']);
-
 
         } catch (Exception $e){
             return response()->json([

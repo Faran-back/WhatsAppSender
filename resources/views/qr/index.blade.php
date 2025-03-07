@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('QR CODE') }}
+            {{ __('Scan QR Code') }}
         </h2>
     </x-slot>
 
@@ -9,11 +9,14 @@
         <!-- QR Code -->
         <div>
             @if($qrCodeImage)
-                <img id="qrImage" src="{{ $qrCodeImage }}" alt="QR Code" class="w-64 h-64 border border-gray-300 rounded-lg shadow-md">
+                <div id="qrImage" class="w-64 h-64 border border-gray-300 rounded-lg shadow-md">
+                    {!! $qrCodeImage !!}
+                </div>
             @else
                 <p class="text-red-500">Failed to generate QR Code.</p>
             @endif
         </div>
+
 
         <!-- Instructions -->
         <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md w-96">
