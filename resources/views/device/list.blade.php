@@ -44,21 +44,27 @@
                             <td class="border border-gray-300 p-2">{{ $device->phone_number }}</td>
                             <td class="border border-gray-300 p-2">{{ $device->description }}</td>
                             @if($device->status === 'Connected')
-                            <td class="border border-gray-300 text-green-600 p-2">{{ $device->status }}</td>
+                            <td class="border border-gray-300 text-green-600 p-2 font-bold">{{ $device->status }}</td>
                             @else
-                            <td class="border border-gray-300 text-red-500 p-2">{{ $device->status }}</td>
+                            <td class="border border-gray-300 text-red-500 p-2 font-bold">{{ $device->status }}</td>
                             @endif
                             <td class="border border-gray-300 p-2 text-center">
 
-                                <a href="{{ route('qr.code', $device->id) }}" class="px-2">
-                                   Scan <i class="fa fa-qrcode"></i>
-                                </a>
+                                @if($device->status === 'Connected')
+                                    <a href="#" class="px-2 text-red-500 font-bold hover:text-red-600 ">
+                                        Disconnect <i class="fa-solid fa-link-slash"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('qr.code', $device->id) }}" class="px-2 text-gray-500 hover:text-gray-700">
+                                        Scan <i class="fa fa-qrcode"></i>
+                                    </a>
+                                @endif
 
-                                <a href="{{ route('edit.device', $device->id) }}" class="text-blue-500 px-2">
+                                <a href="{{ route('edit.device', $device->id) }}" class="text-blue-500 hover:text-blue-600 px-2">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <button type="button" class="text-red-500 px-2 delete-btn" data-id="{{ $device->id }}">
+                                <button type="button" class="text-red-500 hover:text-red-600 px-2 delete-btn" data-id="{{ $device->id }}">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
 

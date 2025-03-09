@@ -15,8 +15,9 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->string('message');
-            $table->string('to');
+            $table->string('phone');
             $table->foreignIdFor(Device::class);
+            $table->string('token');
             $table->timestamps();
         });
     }

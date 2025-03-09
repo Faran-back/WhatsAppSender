@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     protected $fillable = [
-        'message', 'to', 'device_id'
+        'message', 'phone', 'device_id','token'
     ];
 }

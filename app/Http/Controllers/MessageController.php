@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Device;
 use App\Models\Message;
-use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 
 class MessageController extends Controller
@@ -20,42 +21,69 @@ class MessageController extends Controller
     public function send_message(Request $request)
     {
         try {
-            // Validate input
             $request->validate([
                 'device' => 'required',
-                'to' => 'required',
+                'phone' => 'required',
                 'message' => 'required|string'
             ]);
 
             $device = Device::findOrFail($request->device);
+            $session = $device->device_name;
 
-            $response = Http::post(env('URL_WA_SERVER') . $device->name . '/messages/send', [
-            ]);
+            // Debug: Log session value
+            Log::info("Using session: " . $session);
 
-            // Decode response
-            $responseData = $response->json();
-
-            // Check for API errors
-            if (isset($responseData['error'])) {
-                throw new Exception($responseData['error']['message']);
+            if (!$session) {
+                return response()->json([
+                    'status' => 'error',
+                    'error' => 'Session ID is missing!',
+                ]);
             }
 
-            Message::create([
-                'device_id' => $request->device_id,
-                'to' => $request->to,
+            $url = "http://localhost:21465/api/{$session}/send-message"; // Correct syntax
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $device->token
+            ])->post($url, [
+                'phone' => $request->phone . '@s.whatsapp.net',
                 'message' => $request->message,
             ]);
 
+            Log::info("WhatsApp API Response:", ['body' => $response->body()]);
+
+            if (!$response->successful()) {
+                Log::error("WhatsApp API Request Failed. Response: " . $response->body());
+
+                return response()->json([
+                    'status' => 'error',
+                    'error' => 'API request failed',
+                    'api_response' => $response->body(),
+                ]);
+            }
+
+            Message::create([
+                'device_id' => $device->id,
+                'phone' => $request->phone,
+                'message' => $request->message,
+                'token' => $device->token
+            ]);
+
             return response()->json([
-                'success' => true,
+                'status' => 'success',
                 'message' => 'Message sent successfully!',
+                'api_response' => $response->json(),
             ]);
 
         } catch (Exception $e) {
+            Log::error("WhatsApp API Error: " . $e->getMessage());
+
             return response()->json([
-                'status' => 500,
+                'status' => 'error',
                 'error' => $e->getMessage(),
             ]);
         }
     }
+
+
+
 }
