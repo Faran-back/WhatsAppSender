@@ -46,9 +46,13 @@ class QrCodeController extends Controller
 
         if ($response->successful()) {
 
-            $device->update([
-                'status' => 'Disconnected'
-            ]);
+            if($device->status === 'Connected'){
+                $device->update([
+                    'status' => 'Disconnected'
+                ]);
+            }else{
+                return redirect()->route('device.list')->with('error', 'Device Already Disconnected');
+            }
 
             return redirect()->route('device.list')->with('success', 'Disconnected');
         }
