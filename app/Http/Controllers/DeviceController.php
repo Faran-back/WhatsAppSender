@@ -32,8 +32,8 @@ class DeviceController extends Controller
         try{
 
             $request->validate([
-                'phone_number' => 'required',
-                'device_name' => 'required'
+                'phone_number' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
+                'device_name' => 'required|string'
             ]);
 
             $device = Device::create([
@@ -85,9 +85,9 @@ class DeviceController extends Controller
         try{
 
            $validatedData =  $request->validate([
-                'device_name' => 'required',
-                'phone_number' => 'required',
-                'description' => 'required',
+                'device_name' => 'required|string',
+                'phone_number' => 'required|string|regex:/^\+?[0-9]{10,15}$/',
+                'description' => 'required|string',
             ]);
 
             $device = Device::where('id',$id)->update($validatedData);

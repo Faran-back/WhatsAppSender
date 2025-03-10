@@ -11,7 +11,8 @@
             @if(isset($qrCodeImage))
             <img src="{{ $qrCodeImage }}" alt="QR Code">
         @else
-            <p>No QR code available.</p>
+            <p class="font-semibold">The QR is being Loaded.</p>
+            <p class="font-semibold">Try Refreshing the page after few seconds</p>
         @endif
         </div>
 
