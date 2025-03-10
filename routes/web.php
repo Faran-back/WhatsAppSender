@@ -37,8 +37,10 @@ Route::delete('delete-device/{device}',[DeviceController::class, 'delete'])->nam
 Route::get('check-status/{id}', [DeviceController::class, 'checkStatus']);
 
 
-// QR CODE
+
+// QR CODE / SESSION
 Route::get('qr-code/{device}', [QrCodeController::class, 'scan'])->name('qr.code');
+Route::post('disconnect/{device}', [QrCodeController::class, 'disconnect_session'])->name('disconnect.session');
 
 
 require __DIR__.'/auth.php';

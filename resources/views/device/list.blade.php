@@ -9,6 +9,34 @@
     }
     </style>
 
+@if (session()->has('success'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.dispatchEvent(new CustomEvent("filament-notification", {
+            detail: {
+                title: "Success",
+                message: "{{ session('success') }}",
+                type: "success",
+            },
+        }));
+    });
+</script>
+@endif
+
+@if (session()->has('error'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        window.dispatchEvent(new CustomEvent("filament-notification", {
+            detail: {
+                title: "Error",
+                message: "{{ session('error') }}",
+                type: "danger",
+            },
+        }));
+    });
+</script>
+@endif
+
 
     <x-slot name="header">
         <div class="flex justify-between">
@@ -51,9 +79,12 @@
                             <td class="border border-gray-300 p-2 text-center">
 
                                 @if($device->status === 'Connected')
-                                    <a href="#" class="px-2 text-red-500 font-bold hover:text-red-600 ">
-                                        Disconnect <i class="fa-solid fa-link-slash"></i>
-                                    </a>
+                                    <form action="{{ route('disconnect.session' , $device->id ) }}" method="POST" class=" inline">
+                                        @csrf
+                                        <button type="submit" class="px-2 text-red-500 font-bold hover:text-red-600">
+                                            Disconnect <i class="fa-solid fa-link-slash"></i>
+                                        </button>
+                                    </form>
                                 @else
                                     <a href="{{ route('qr.code', $device->id) }}" class="px-2 text-gray-500 hover:text-gray-700">
                                         Scan <i class="fa fa-qrcode"></i>

@@ -46,7 +46,7 @@
                             icon: "success",
                             title: "Connected!",
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 5000
                         });
 
                         setTimeout(() => {
