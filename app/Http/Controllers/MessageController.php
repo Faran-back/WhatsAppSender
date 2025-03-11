@@ -28,6 +28,7 @@ class MessageController extends Controller
             ]);
 
             $device = Device::findOrFail($request->device);
+
             $session = $device->device_name;
 
             // Debug: Log session value

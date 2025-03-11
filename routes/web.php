@@ -35,6 +35,7 @@ Route::get('edit-device/{device}',[DeviceController::class, 'edit'])->name('edit
 Route::put('update-device/{device}',[DeviceController::class, 'update'])->name('update.device');
 Route::delete('delete-device/{device}',[DeviceController::class, 'delete'])->name('delete.device');
 Route::get('check-status/{id}', [DeviceController::class, 'checkStatus']);
+Route::get('device-sessions/{id}', [DeviceController::class, 'deviceSessions'])->name('device.sessions');
 
 
 

@@ -68,7 +68,11 @@
                     <tbody>
                         @foreach($devices as $device)
                         <tr>
-                            <td class="border border-gray-300 p-2">{{ $device->device_name }}</td>
+                                <td class="border border-gray-300 p-2">
+                                    <a href="{{ route('device.sessions', $device->id) }}">
+                                        {{ $device->device_name }}
+                                    </a>
+                                </td>
                             <td class="border border-gray-300 p-2">{{ $device->phone_number }}</td>
                             <td class="border border-gray-300 p-2">{{ $device->description }}</td>
                             @if($device->status === 'Connected')

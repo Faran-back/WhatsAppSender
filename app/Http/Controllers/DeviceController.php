@@ -146,4 +146,13 @@ public function checkStatus($id){
         return response()->json(['status' => 'Disconnected']);
 
 }
+
+public function deviceSessions($id){
+    $device = Device::findOrFail($id);
+
+    return view('device.sessions', compact('device'));
 }
+
+
+}
+

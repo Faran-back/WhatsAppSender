@@ -35,7 +35,6 @@ class QrCodeController extends Controller
     public function disconnect_session(Request $request, $id){
         try{
 
-
         $device = Device::findOrFail($id);
 
         $session = $device->device_name;
